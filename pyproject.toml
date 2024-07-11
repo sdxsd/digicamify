@@ -1,11 +1,10 @@
 [project]
-name = "Digicamify"
+name = "digicamify"
 version = "1.0.0"
 description = "EnSOVLify your SOVLLESS digital images."
 dependencies = [
     "flask",
     "pillow",
-    "opencv-python",
     "numpy",
     "pillow_lut"
 ]

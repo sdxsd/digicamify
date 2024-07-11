@@ -1,0 +1,15 @@
+[project]
+name = "Digicamify"
+version = "1.0.0"
+description = "EnSOVLify your SOVLLESS digital images."
+dependencies = [
+    "flask",
+    "pillow",
+    "opencv-python",
+    "numpy",
+    "pillow_lut"
+]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

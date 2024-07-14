@@ -25,16 +25,15 @@
 
 # A program is free software if users have all of these freedoms.
 
-from PIL import (ImageFilter, ImageChops, Image)
+from PIL import (ImageFilter, ImageChops, Image, ImageOps)
 from pillow_lut import load_cube_file
 import math
 import os
 
-NOISE_DATA = "NOISE.tif"
+NOISE_DATA = "NOISE12.tif"
 
 def apply_noise(noise, base):
-    result = ImageChops.overlay(base, noise)
-    return (result)
+    return (ImageChops.overlay(base, noise))
 
 def resize(noise, base):
     bwidth, bheight = base.size
@@ -49,12 +48,15 @@ def resize(noise, base):
         return (resized)
     return (base)
 
+# Constantly being changed lol
 def enhance_image(base, noise):
-    lut = load_cube_file("./LUT/kyocerasix.cube")
-    base = base.filter(lut)
-    base = base.filter(ImageFilter.GaussianBlur(0.5))
+    # lut = load_cube_file("./LUT/kyocerasix.cube")
+    # base = base.filter(lut)
+    # noise = noise.filter(ImageFilter.GaussianBlur(0.2))
+    # noise = noise.filter(ImageFilter.UnsharpMask(1))
     base = apply_noise(noise, base)
     base = base.filter(ImageFilter.UnsharpMask(0.5))
+    # base = base.filter(ImageFilter.GaussianBlur(0.5))
     return (base)
 
 def process_and_save_image(filename, upload_dir, save_dir):

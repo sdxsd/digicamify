@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# DIGICAMIFY IS LICENSED UNDER THE GNU GPLv3
+# FAIRCAM IS LICENSED UNDER THE GNU GPLv3
 # Copyright (C) 2024 Will Maguire
 
 # This program is free software: you can redistribute it and/or modify
@@ -28,20 +28,20 @@
 from flask import Flask, flash, request, redirect, render_template, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from . import process_image
-from digicamify.posts import posts
+from faircam.posts import posts
 import os
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tif'}
 
 def create_app():
-    digicamify = Flask(__name__)
-    digicamify.config.from_mapping(
-        UPLOAD_FOLDER="digicamify/static/uploads/",
-        PROCESSED_FOLDER="digicamify/static/processed/"
+    faircam = Flask(__name__)
+    faircam.config.from_mapping(
+        UPLOAD_FOLDER="faircam/static/uploads/",
+        PROCESSED_FOLDER="faircam/static/processed/"
     )
-    digicamify.register_blueprint(posts)
+    faircam.register_blueprint(posts)
 
-    @digicamify.route('/', methods=['GET', 'POST'])
+    @faircam.route('/', methods=['GET', 'POST'])
     def index():
         if request.method == 'POST':
             if 'file' not in request.files:
@@ -51,17 +51,17 @@ def create_app():
                 return (redirect(request.url))
 
             if file and allowed_file(file.filename):
-                process_image.process_and_save_image(file, digicamify.config['PROCESSED_FOLDER'])
+                process_image.process_and_save_image(file, faircam.config['PROCESSED_FOLDER'])
                 return redirect(url_for('view_file', name=secure_filename(file.filename)))
 
         return render_template('index.html')
 
-    @digicamify.route('/view/<name>')
+    @faircam.route('/view/<name>')
     def view_file(name):
-        dir = os.path.abspath(digicamify.config['PROCESSED_FOLDER'])
-        return render_template('image.html', img=("processed/" + name))
+        dir = os.path.abspath(faircam.config['PROCESSED_FOLDER'])
+        return render_template('faircam/image.html', img=("processed/" + name))
 
-    return digicamify
+    return faircam
 
 def allowed_file(filename):
     return '.' in filename and \

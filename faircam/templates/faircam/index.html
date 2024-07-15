@@ -1,0 +1,34 @@
+<!doctype html>
+{% extends "base.html" %}
+{% block title %}cybercam.club{% endblock %}
+{% block head %}
+	{{ super() }}
+{% endblock %}
+{% block logo %}{{ super() }}{% endblock %}
+
+{% block content %}
+<body>
+	<div class="uploadBox">
+		<form method="post" enctype="multipart/form-data">
+			<input type="file" name="file" class="file-input">
+			<br><br>
+			<input type="submit" value="Digicamify image..." class="button"/>
+		</form>
+		<p>
+			In the early 2000s Kyocera made a series of cameras under the name Finecam.
+			<br>
+			These cameras are known for having a very unique look to them and this
+			website attempts to emulate that look.
+			<br>
+			You can upload an image here and it will be processed to look like it came from one of these cameras.
+			<br><br>
+			This website is Free Software and the source code can be found
+			<a href="https://github.com/sdxsd/digicamify"style="color:magenta;">here.</a>
+			<br><br>
+			<img src="{{url_for('static', filename='img/cool.jpg')}}" alt="cat">
+			<img src={{url_for('static', filename='img/camera.gif')}} alt="cam">
+			<img src={{url_for('static', filename="img/brabant.gif")}} alt="brabant">
+		</p>
+	</div>
+</body>
+{% endblock %}

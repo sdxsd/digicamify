@@ -1,5 +1,5 @@
 [project]
-name = "digicamify"
+name = "faircam"
 version = "1.0.0"
 description = "Ensoulify your digital images."
 dependencies = [

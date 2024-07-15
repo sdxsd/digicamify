@@ -5,3 +5,19 @@
 	{{ super() }}
 {% endblock %}
 {% block logo %}{{ super() }}{% endblock %}
+{% block content %}
+<body>
+	<div class="postButton">
+		<h1>
+			<a href={{ url_for('posts.post') }}>Make post</a>
+		</h1>
+	</div>
+	{% for post in posts %}
+		<div class="postBox">
+			<img src="{{ url_for('static', filename=('uploads/' + post['filename'])) }}" width=95% style="padding: 5px;">
+			<h2>{{ post['title'] }}</h2>
+		</div>
+		<br><br>
+	{% endfor %}
+</body>
+{% endblock %}

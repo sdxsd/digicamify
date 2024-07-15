@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# DIGICAMIFY IS LICENSED UNDER THE GNU GPLv3
+# FAIRCAM IS LICENSED UNDER THE GNU GPLv3
 # Copyright (C) 2024 Will Maguire
 
 # This program is free software: you can redistribute it and/or modify
@@ -25,19 +25,26 @@
 
 # A program is free software if users have all of these freedoms.
 
-from flask import Blueprint, request, redirect, render_template, abort, flash, url_for
+from flask import Blueprint, request, redirect, render_template, abort, flash, url_for, current_app
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime, timezone
 from jinja2 import TemplateNotFound
 from faircam.db import get_db
 from . import utils
+import os
 
 posts = Blueprint('posts', __name__, template_folder='templates/posts')
 
 @posts.route('/posts/')
 def view_posts():
-    return (render_template('posts.html'))
+    db = get_db()
+    all_posts = db.execute(
+        'SELECT id, title, posted, filename'
+        ' FROM post p'
+        ' ORDER BY posted DESC'
+    ).fetchall()
+    return (render_template('posts.html', posts=all_posts))
 
 @posts.route('/create_post', methods=['GET', 'POST'])
 def post():
@@ -52,6 +59,7 @@ def post():
 
         title = request.form['title']
         filename = secure_filename(image.filename)
+        image.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
         deletion_pass = request.form['deletion_pass']
         if not title:
             flash('No title given...')

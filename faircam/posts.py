@@ -25,11 +25,50 @@
 
 # A program is free software if users have all of these freedoms.
 
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, request, redirect, render_template, abort, flash, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
+from datetime import datetime, timezone
 from jinja2 import TemplateNotFound
+from faircam.db import get_db
+from . import utils
 
 posts = Blueprint('posts', __name__, template_folder='templates/posts')
 
 @posts.route('/posts/')
 def view_posts():
     return (render_template('posts.html'))
+
+@posts.route('/create_post', methods=['GET', 'POST'])
+def post():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No image uploaded...')
+            return redirect(request.url)
+        image = request.files['file']
+        if image.filename == '' or image.filename == None or not utils.allowed_file(image.filename):
+            flash('Invalid or No image uploaded...')
+            return redirect(request.url)
+
+        title = request.form['title']
+        filename = secure_filename(image.filename)
+        deletion_pass = request.form['deletion_pass']
+        if not title:
+            flash('No title given...')
+            redirect(request.url)
+
+        db = get_db()
+        try:
+            if not deletion_pass:
+                db.execute("INSERT INTO post (title, filename, posted) VALUES (?, ?, ?)",
+                       (title, filename, datetime.now(timezone.utc)))
+            else:
+                db.execute("INSERT INTO post (title, filename, posted, deletion_pass) VALUES (?, ?, ?, ?)",
+                           (title, filename, datetime.now(timezone.utc), generate_password_hash(deletion_pass)))
+            db.commit()
+        except db.IntegrityError:
+            error = "Post with the same name or filename already exists."
+            flash(error)
+        else:
+            return (redirect(url_for('posts.view_posts')))
+    return render_template('create_post.html')

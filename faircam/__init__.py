@@ -27,19 +27,22 @@
 
 from flask import Flask, flash, request, redirect, render_template, url_for, send_from_directory
 from werkzeug.utils import secure_filename
-from . import process_image
 from faircam.posts import posts
+from . import process_image
+from . import db
+from . import utils
 import os
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tif'}
-
 def create_app():
-    faircam = Flask(__name__)
+    faircam = Flask(__name__, instance_relative_config=True)
     faircam.config.from_mapping(
+        SECRET_KEY='dev', # FIXME: Must be changed before live!
         UPLOAD_FOLDER="faircam/static/uploads/",
-        PROCESSED_FOLDER="faircam/static/processed/"
+        PROCESSED_FOLDER="faircam/static/processed/",
+        DATABASE=os.path.join(faircam.instance_path, 'posts.sqlite')
     )
     faircam.register_blueprint(posts)
+    db.init_app(faircam)
 
     @faircam.route('/', methods=['GET', 'POST'])
     def index():
@@ -50,7 +53,7 @@ def create_app():
             if file.filename == '':
                 return (redirect(request.url))
 
-            if file and allowed_file(file.filename):
+            if file and utils.allowed_file(file.filename):
                 process_image.process_and_save_image(file, faircam.config['PROCESSED_FOLDER'])
                 return redirect(url_for('view_file', name=secure_filename(file.filename)))
 
@@ -62,7 +65,3 @@ def create_app():
         return render_template('faircam/image.html', img=("processed/" + name))
 
     return faircam
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

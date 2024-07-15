@@ -26,6 +26,7 @@
 # A program is free software if users have all of these freedoms.
 
 from PIL import (ImageFilter, ImageChops, Image, ImageOps)
+from werkzeug.utils import secure_filename
 from pillow_lut import load_cube_file
 import math
 import os
@@ -42,9 +43,9 @@ def resize(noise, base):
     true_nheight = int(nheight * (1 / math.sqrt(2)))
     if (bwidth > true_nwidth):
         new_bheight = int(bheight * (true_nwidth / bwidth))
-        resized = base.resize((true_nwidth, new_bheight), Image.Resampling.NEAREST)
+        resized = base.resize((true_nwidth, new_bheight), Image.Resampling.BICUBIC)
         new_bheight = int(new_bheight * (nwidth / true_nwidth))
-        resized = base.resize((nwidth, new_bheight), Image.Resampling.HAMMING)
+        resized = resized.resize((nwidth, new_bheight), Image.Resampling.BILINEAR)
         return (resized)
     return (base)
 
@@ -52,17 +53,15 @@ def resize(noise, base):
 def enhance_image(base, noise):
     # lut = load_cube_file("./LUT/kyocerasix.cube")
     # base = base.filter(lut)
-    # noise = noise.filter(ImageFilter.GaussianBlur(0.2))
-    # noise = noise.filter(ImageFilter.UnsharpMask(1))
+    base = base.filter(ImageFilter.GaussianBlur(0.3))
     base = apply_noise(noise, base)
     base = base.filter(ImageFilter.UnsharpMask(0.5))
-    # base = base.filter(ImageFilter.GaussianBlur(0.5))
     return (base)
 
-def process_and_save_image(filename, upload_dir, save_dir):
-    base = Image.open(os.path.join(upload_dir, filename))
+def process_and_save_image(file, save_dir):
+    base = Image.open(file)
     noise = Image.open(NOISE_DATA)
     base = resize(noise, base)
     base = enhance_image(base, noise)
-    processed_path = os.path.join(save_dir, filename)
-    base.save(processed_path)
+    processed_path = os.path.join(save_dir, secure_filename(file.filename))
+    base.save(processed_path, quality="maximum")

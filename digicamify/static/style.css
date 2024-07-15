@@ -12,14 +12,9 @@ body {
 	background-image: url("img/space.gif");
 	background-color: black;
 	width: 70%;
-	border: 3px solid magenta;
 	padding: 16px;
 	margin: auto;
 	box-shadow: 0 0 20px 10px magenta;
-}
-
-input {
-	background-color: white;
 }
 
 .file-input {

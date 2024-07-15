@@ -1,16 +1,13 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Digicamify</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	</head>
-<body>
-	<div class="logo">
-		<img src="{{url_for('static', filename='img/logo.png')}}", alt="logo" width=50%>
-	</div>
+{% extends "base.html" %}
+{% block title %}cybercam.club{% endblock %}
+{% block head %}
+	{{ super() }}
+{% endblock %}
+{% block logo %}{{ super() }}{% endblock %}
 
+{% block content %}
+<body>
 	<div class="uploadBox">
 		<form method="post" enctype="multipart/form-data">
 			<input type="file" name="file" class="file-input">
@@ -34,4 +31,4 @@
 		</p>
 	</div>
 </body>
-</html>
+{% endblock %}

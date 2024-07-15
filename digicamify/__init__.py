@@ -25,10 +25,11 @@
 
 # A program is free software if users have all of these freedoms.
 
-import os
 from flask import Flask, flash, request, redirect, render_template, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from . import process_image
+from digicamify.posts import posts
+import os
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tif'}
 
@@ -38,6 +39,7 @@ def create_app():
         UPLOAD_FOLDER="digicamify/static/uploads/",
         PROCESSED_FOLDER="digicamify/static/processed/"
     )
+    digicamify.register_blueprint(posts)
 
     @digicamify.route('/', methods=['GET', 'POST'])
     def index():
@@ -49,12 +51,8 @@ def create_app():
                 return (redirect(request.url))
 
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(digicamify.config['UPLOAD_FOLDER'], filename))
-                print(os.path.join(digicamify.config['UPLOAD_FOLDER'], filename))
-                process_image.process_and_save_image(filename, digicamify.config['UPLOAD_FOLDER'], digicamify.config['PROCESSED_FOLDER'])
-                os.remove(os.path.join(digicamify.config['UPLOAD_FOLDER'], filename))
-                return redirect(url_for('view_file', name=filename))
+                process_image.process_and_save_image(file, digicamify.config['PROCESSED_FOLDER'])
+                return redirect(url_for('view_file', name=secure_filename(file.filename)))
 
         return render_template('index.html')
 

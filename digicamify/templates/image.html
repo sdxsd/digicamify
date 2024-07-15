@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Digicamify</title>
-		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	</head>
-	<body>
-		<div class="logo">
-			<img src="{{url_for('static', filename='logo.png')}}", alt="logo">
-		</div>
-		<div class="resultImage">
-			<img src="{{url_for('static', filename=img)}}" width=50% style="box-shadow: 0 0 20px 10px magenta;">
-		</div>
-	</body>
-</html>
+<!doctype html>
+{% extends "base.html" %}
+{% block title %}cybercam.club{% endblock %}
+{% block head %}
+	{{ super() }}
+{% endblock %}
+{% block logo %}{{ super() }}{% endblock %}
+
+{% block content %}
+<body>
+	<div class="resultImage">
+		<img src="{{url_for('static', filename=img)}}" width=50% style="box-shadow: 0 0 20px 10px magenta;">
+	</div>
+</body>
+{% endblock %}

@@ -57,7 +57,7 @@ def create_app():
                 process_image.process_and_save_image(file, faircam.config['PROCESSED_FOLDER'])
                 return redirect(url_for('view_file', name=secure_filename(file.filename)))
 
-        return render_template('index.html')
+        return render_template('faircam/index.html')
 
     @faircam.route('/view/<name>')
     def view_file(name):

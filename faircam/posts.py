@@ -46,6 +46,42 @@ def view_posts():
     ).fetchall()
     return (render_template('posts.html', posts=all_posts))
 
+@posts.route('/post/<postid>', methods=['GET'])
+def view_post(postid):
+    db = get_db()
+    post = db.execute(
+        "SELECT id, title, posted, filename FROM post where id = ?",
+        (postid,)
+    ).fetchone()
+    return (render_template('post.html', post=post))
+
+@posts.route('/post/delete/<postid>', methods=['GET', 'POST'])
+def delete_post(postid):
+    if request.method == 'POST':
+        deletion_pass = request.form['deletion_pass']
+        if not deletion_pass:
+            flash('No deletion password given.')
+            return render_template('delete.html')
+        db = get_db()
+        post = db.execute(
+            'SELECT deletion_pass from post WHERE id = ?',
+            (postid,)
+        ).fetchone()
+        if post['deletion_pass'] is None:
+            flash('Post has no deletion password.')
+            return (render_template('delete.html'))
+        if check_password_hash(post['deletion_pass'], deletion_pass) == False:
+            flash('Invalid deletion password.')
+            return render_template('delete.html', id=postid)
+        else:
+            db.execute(
+                'DELETE FROM post WHERE id = ?',
+                (postid,)
+            )
+            db.commit()
+            return redirect(url_for('posts.view_posts'))
+    return (render_template('delete.html', id=postid))
+
 @posts.route('/create_post', methods=['GET', 'POST'])
 def post():
     if request.method == 'POST':

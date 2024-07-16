@@ -7,22 +7,20 @@
 {% block logo %}{{ super() }}{% endblock %}
 
 {% block content %}
-<body>
-	<div class="uploadBox">
-		{% for msg in get_flashed_messages() %}
-			<h1>{{ msg }}</h1>
-		{% endfor %}
-		<p1>Create a post!</p1><br><br>
-		<form method="post" enctype="multipart/form-data">
-			<label for="ptitle">Post title:</label><br>
-			<input type="text" id="ptitle" name="title"><br><br>
-			<label for="dpass">Deletion password (You need this if you want to delete a post.)</label><br>
-			<input type="text" id="dpass" name="deletion_pass"><br><br>
-			<label for="image">Photo to upload:</label><br>
-			<input type="file" id="image" name="file" class="file-input"><br>
-			<br>
-			<input type="submit" value="Create post..." class="button"/>
-		</form>
-	</div>
-</body>
+<div class="uploadBox">
+	{% for msg in get_flashed_messages() %}
+	<h1>{{ msg }}</h1>
+	{% endfor %}
+	<p1>Create a post!</p1><br><br>
+	<form method="post" enctype="multipart/form-data">
+		<label for="ptitle">Post title:</label><br>
+		<input type="text" id="ptitle" name="title"><br><br>
+		<label for="dpass">Deletion password (You need this if you want to delete a post.)</label><br>
+		<input type="text" id="dpass" name="deletion_pass"><br><br>
+		<label for="image">Photo to upload:</label><br>
+		<input type="file" id="image" name="file" class="file-input"><br>
+		<br>
+		<input type="submit" value="Create post..." class="button"/>
+	</form>
+</div>
 {% endblock %}

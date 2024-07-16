@@ -1,0 +1,20 @@
+<!doctype html>
+{% extends "base.html" %}
+{% block title %}cybercam.club{% endblock %}
+{% block head %}
+	{{ super() }}
+{% endblock %}
+{% block logo %}{{ super() }}{% endblock %}
+{% block content %}
+	<h1>Delete post: {{ id }}</h1>
+	{% for msg in get_flashed_messages() %}
+		<h1 style="color: red; text-align: center;">Error: {{ msg }}</h1><br>
+	{% endfor %}
+	<div class="uploadBox">
+		<form method="post">
+			<label for="dpass">Deletion password:</label><br>
+			<input type="text" id="dpass" name="deletion_pass"/><br><br>
+			<input type="submit" value="Delete post..." class="button"/>
+		</form>
+	</div>
+{% endblock %}

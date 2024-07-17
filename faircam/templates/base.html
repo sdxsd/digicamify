@@ -2,6 +2,7 @@
 <html class="no-js" lang="">
 	{% block head %}
 	<head>
+		{{ moment.include_moment() }}
 		<meta charset="utf-8">
 		<meta http-equiv="x-ua-compatible" content="ie=edge">
 		<meta name="description" content="">
@@ -15,7 +16,7 @@
 		<div class="logo">
 			<img src="{{url_for('static', filename='img/konica.png')}}", alt="logo" width=100px>
 		</div>
-		<h1>Nyocera-Fair.cam</h1>
+		<h1>nyocera-fair.cam</h1>
 		{% endblock %}
 		{% block content %}
 		{% endblock %}

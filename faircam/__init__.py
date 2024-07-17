@@ -28,22 +28,29 @@
 from flask import Flask, flash, request, redirect, render_template, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from faircam.posts import posts
+from flask_moment import Moment
 from . import process_image
-from . import db
 from . import utils
+from . import db
+import tomllib
 import os
+
+moment = Moment()
 
 def create_app():
     faircam = Flask(__name__, instance_relative_config=True)
     faircam.config.from_mapping(
         SECRET_KEY='dev', # FIXME: Must be changed before live!
+        MASTER_DELETION_PASS='devpass',
         UPLOAD_FOLDER="faircam/static/uploads/",
         PROCESSED_FOLDER="faircam/static/processed/",
         DATABASE=os.path.join(faircam.instance_path, 'posts.sqlite')
     )
-    faircam.register_blueprint(posts)
+    moment.init_app(faircam)
     db.init_app(faircam)
 
+    # Blueprints.
+    faircam.register_blueprint(posts)
     @faircam.route('/', methods=['GET', 'POST'])
     def index():
         if request.method == 'POST':

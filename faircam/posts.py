@@ -36,6 +36,13 @@ import os
 
 posts = Blueprint('posts', __name__, template_folder='templates/posts')
 
+def delete_post_by_id(db, postid):
+    db.execute(
+        'DELETE FROM post WHERE id = ?',
+        (postid,)
+    )
+    db.commit()
+
 @posts.route('/posts/')
 def view_posts():
     db = get_db()
@@ -67,19 +74,18 @@ def delete_post(postid):
             'SELECT deletion_pass from post WHERE id = ?',
             (postid,)
         ).fetchone()
+        if (deletion_pass == current_app.config['MASTER_DELETION_PASS']):
+            delete_post_by_id(db, postid)
+            return redirect(url_for('posts.view_posts'))
         if post['deletion_pass'] is None:
-            flash('Post has no deletion password.')
+            flash('Post has no deletion password set. Contact site admin for removal')
             return (render_template('delete.html'))
-        if check_password_hash(post['deletion_pass'], deletion_pass) == False:
+        if check_password_hash(post['deletion_pass'], deletion_pass) == True:
+            delete_post_by_id(db, postid)
+            return redirect(url_for('posts.view_posts'))
+        else:
             flash('Invalid deletion password.')
             return render_template('delete.html', id=postid)
-        else:
-            db.execute(
-                'DELETE FROM post WHERE id = ?',
-                (postid,)
-            )
-            db.commit()
-            return redirect(url_for('posts.view_posts'))
     return (render_template('delete.html', id=postid))
 
 @posts.route('/create_post', methods=['GET', 'POST'])

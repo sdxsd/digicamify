@@ -13,9 +13,14 @@
 </div>
 {% for post in posts %}
 <div class="postBox">
-	<img src="{{ url_for('static', filename=('uploads/' + post['filename'])) }}">
+	<div class="desc">
+		No.{{ post['id'] }} -
+		{{ moment(post['posted']).format('LLLL') }}<br>
+		/ {{ post['title'] }} /
+	</div>
 	<a href={{ url_for('posts.view_post', postid=post['id']) }}>
-	<div class="desc">{{ post['title'] }}</div>
+		<img src="{{ url_for('static', filename=('uploads/' + post['filename'])) }}">
+	</a>
 </div>
 <br>
 {% endfor %}

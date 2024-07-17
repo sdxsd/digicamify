@@ -1,17 +1,49 @@
 body {
 	background-image: url("img/starsbg.gif");
+	/* background-image: url("img/water.gif"); */
+	/* background-image: url("img/cloud-background.jpg"); */
 	/* background-size: cover; */
 	background-color: black;
 	/* background: #eef2ff url(img/backr.png) top center repeat-x; */
+}
+
+@font-face {
+	font-family: 'orbitron';
+	src: url('fonts/orbitron-variablefont_wght-webfont.woff2') format('woff2'),
+		 url('fonts/orbitron-variablefont_wght-webfont.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
 }
 
 .logo {
 	text-align: center;
 }
 
+.postImage {
+	margin: auto;
+	text-align: center;
+}
+
+.postImage img {
+	border: 1px solid white;
+	width: 380px;
+}
+
+@media screen and (min-width: 480px) {
+	.postImage img {
+		width: 800px;
+	}
+}
+
+@media screen and (min-width: 2560px) {
+	.postImage img {
+		width: 1280px;
+	}
+}
+
 .uploadBox {
-	background: rgba(255,255,255,.2);
-	font-family: "Nicomedia";
+	background-color: black;
+	border: 1px solid white;
 	color: white;
 	display: table;
 	font-family: sans-serif;
@@ -20,23 +52,44 @@ body {
 }
 
 .postBox {
-	background: rgba(255,255,255,.1);
-	font-family: "Nicomedia";
+	/* background: rgba(255,255,255,.2); */
+	background-color: black;
+	border: 1px solid white;
 	color: white;
-	border-left: none;
-	border-right: none;
-	border-top: none;
 	align-content: center;
 	margin: auto;
-	width: 400px;
+	width: 380px;
+}
+
+@media screen and (min-width: 480px) {
+	.postBox {
+		width: 612px;
+	}
+}
+
+@media screen and (min-width: 1600px) {
+	.postBox {
+		width: 812px;
+	}
+}
+
+.postBox:hover {
+	border: 2px solid white;
 }
 
 .postBox img {
 	width: 100%;
 	height: auto;
+	vertical-align: bottom;
 }
 
 h1 {
+	font-family: "orbitron";
+	color: white;
+	text-align: center;
+}
+
+h2 {
 	font-family: "Nicomedia";
 	color: white;
 	text-align: center;
@@ -45,7 +98,7 @@ h1 {
 .desc {
 	padding: 15px;
 	text-align: center;
-	font-family: sans-serif;
+	font-family: "orbitron";
 }
 
 .postButton {
@@ -62,5 +115,9 @@ h1 {
 }
 
 .resultImage {
+	text-align: center;
+}
+
+.deletionButton {
 	text-align: center;
 }

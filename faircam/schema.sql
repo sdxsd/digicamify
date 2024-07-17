@@ -7,3 +7,9 @@ CREATE TABLE post (
 	filename TEXT UNIQUE NOT NULL,
 	deletion_pass TEXT
 );
+
+CREATE TABLE comment (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	desc TEXT NOT NULL,
+	FOREIGN KEY (postid) REFERENCES post(id)
+);

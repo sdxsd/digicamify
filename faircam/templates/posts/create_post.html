@@ -1,6 +1,6 @@
 <!doctype html>
 {% extends "base.html" %}
-{% block title %}cybercam.club{% endblock %}
+{% block title %}nyocera-fair.cam{% endblock %}
 {% block head %}
 	{{ super() }}
 {% endblock %}
@@ -12,13 +12,17 @@
 		<h1>{{ msg }}</h1>
 	{% endfor %}
 	<form method="post" enctype="multipart/form-data">
-		<label for="ptitle">Post title:</label><br>
-		<input type="text" id="ptitle" name="title"><br><br>
-		<label for="dpass">Deletion password: (You need this if you want to delete a post)</label><br>
-		<input type="text" id="dpass" name="deletion_pass"><br><br>
-		<label for="image">Photo to upload:</label><br>
-		<input type="file" id="image" name="file" class="file-input"><br>
-		<br>
+		<p>
+			<label for="ptitle">Post title:</label>
+			<input type="text" id="ptitle" name="title">
+		</p>
+		<p>
+			<label for="dpass">Deletion password: </label>
+			<input type="text" id="dpass" name="deletion_pass">
+		</p>
+		<label for="image">Photo to upload:</label>
+		<input type="file" id="image" name="file" class="file-input">
+		<br><br>
 		<input type="submit" value="Create post..." class="button"/>
 	</form>
 </div>

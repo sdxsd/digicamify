@@ -1,6 +1,6 @@
 <!doctype html>
 {% extends "base.html" %}
-{% block title %}cybercam.club{% endblock %}
+{% block title %}nyocera-fair.cam{% endblock %}
 {% block head %}
 	{{ super() }}
 {% endblock %}
@@ -15,13 +15,15 @@
 <div class="postBox">
 	<div class="desc">
 		No.{{ post['id'] }} -
-		{{ moment(post['posted']).format('LLLL') }}<br>
-		/ {{ post['title'] }} /
+		{{ moment(post['posted']).format('LLL') }}<br>
+		<div class ="postTitle">
+			/ {{ post['title'] }} /
+		</div>
 	</div>
 	<a href={{ url_for('posts.view_post', postid=post['id']) }}>
 		<img src="{{ url_for('static', filename=('uploads/' + post['filename'])) }}">
 	</a>
 </div>
-<br>
+<br><br>
 {% endfor %}
 {% endblock %}
